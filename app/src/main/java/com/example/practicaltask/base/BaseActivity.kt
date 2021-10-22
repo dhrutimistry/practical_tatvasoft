@@ -3,20 +3,14 @@ package com.example.practicaltask.base
 import android.app.Application
 import android.app.Dialog
 import android.content.*
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
-import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
-import android.view.Window
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -25,9 +19,6 @@ import com.example.practicaltask.R
 import com.example.practicaltask.databinding.BaseActivityBinding
 import com.example.practicaltask.utils.listeners.setSafeOnClickListener
 import com.example.practicaltask.utils.listners.ConnectivityReceiver
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
-import com.kotlin.mvvm.structure.base.MyApplication
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -71,6 +62,10 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
             if (it != "") {
 //                showMessage(it)
             }
+        })
+
+        baseViewModel.modelResponseMovieData.observe(this, Observer {
+
         })
 
 

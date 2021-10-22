@@ -1,9 +1,8 @@
-package com.kotlin.mvvm.structure.base
+package com.example.practicaltask.base
 
 import android.app.Application
 import android.content.pm.PackageManager
 import androidx.lifecycle.MutableLiveData
-import com.facebook.FacebookSdk
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -20,7 +19,6 @@ class MyApplication : Application() {
         super.onCreate()
 
         application = this
-        FacebookSdk.sdkInitialize(applicationContext)
 
         try {
             val pInfo = this.packageManager.getPackageInfo(packageName, 0)

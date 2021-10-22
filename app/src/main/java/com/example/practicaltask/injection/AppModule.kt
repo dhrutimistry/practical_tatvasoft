@@ -60,7 +60,7 @@ class AppModule {
     @Singleton
     internal fun providerAPPDatabase(@ApplicationContext context: Context):AppDatabase =
         Room.databaseBuilder(
-            context, AppDatabase::class.java, "Kotlin-MVVM-Structure"
+            context, AppDatabase::class.java, "Demo"
         ).allowMainThreadQueries().build()
 
 }

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.practicaltask.R
 import com.example.practicaltask.utils.AppConstants
-import com.kotlin.mvvm.structure.base.MyApplication
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch

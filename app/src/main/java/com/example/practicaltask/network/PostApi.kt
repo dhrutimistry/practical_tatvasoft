@@ -1,5 +1,10 @@
 package com.example.practicaltask.network
 
+import com.example.practicaltask.network.model.ModelResponseMovieData
+import com.example.practicaltask.utils.AppConstants
+import retrofit2.Call
+import retrofit2.http.GET
+
 
 /**
  * The interface which provides methods to get result of webservices
@@ -8,20 +13,6 @@ package com.example.practicaltask.network
 interface PostApi {
 
 
-//    @GET(AppConstants.URL_FETCH_USER_LIST)
-//    suspend fun fetchUserList(
-//        @Query("results") strResultNumber: String?
-//    ): ModelResponseUser
-//
-//
-//    @GET(AppConstants.URL_FETCH_USER_LIST)
-//    suspend fun fetchUserListUsingCoroutine(
-//        @Query("results") strResultNumber: String?
-//    ): ModelResponseUser
-//
-//    @GET(AppConstants.URL_GET_FAKE_PASSENGER_LIST)
-//    suspend fun getPassengerList(
-//        @Query("page")page: Int,
-//        @Query("size")pageSize: Int
-//    ):ModelResponsePassengerList
+    @GET(AppConstants.URL_FETCH_MOVIE_LIST)
+    suspend fun fetchUserList(): List<ModelResponseMovieData>
 }
