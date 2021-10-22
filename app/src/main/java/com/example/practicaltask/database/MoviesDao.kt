@@ -13,21 +13,8 @@ interface MoviesDao
     @Query("SELECT * FROM movies WHERE genre =:genre")
     fun getAll(genre:String): List<Movies>
 
-    @Query("SELECT * FROM movies")
-    fun getAllWithFlow(): Flow<List<Movies>>
-
-    @Insert
-    fun insertAll(movies: ArrayList<Movies>)
-
     @Insert
     fun insert(users: Movies)
 
-    @Insert(onConflict = REPLACE)
-    suspend fun insertAllUsersAsynchronously(movies: ArrayList<Movies>)
 
-    @Query("DELETE FROM movies")
-    fun removeAll()
-
-    @Query("DELETE FROM movies")
-    suspend fun removeAllUsersAsynchronously()
 }

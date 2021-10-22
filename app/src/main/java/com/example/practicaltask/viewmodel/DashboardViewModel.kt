@@ -30,7 +30,6 @@ class DashboardViewModel
     private val appDatabase: AppDatabase
 ) : CoroutineViewModel(context) {
 
-//    var strTextViewMessage = MutableLiveData(context.resources.getString(R.string.text_no_data))
     var isDataAvailable = ObservableBoolean(true)
     var modelResponseMovieData = MutableLiveData<List<ModelResponseMovieData>>(null)
     var modelGenreData = MutableLiveData<List<Genre>>(null)

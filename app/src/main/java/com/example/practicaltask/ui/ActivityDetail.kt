@@ -24,6 +24,8 @@ class ActivityDetail : BaseActivity() {
 
         activityDetailBinding.dashboardViewModel = dashboardViewModel
 
+        //Setting up the toolbar configuration
+        setToolbarConfiguration(true, ToolbarConfiguration(isBackButtonVisible = true))
         img = intent.extras!!.getString("img").toString()
 
 

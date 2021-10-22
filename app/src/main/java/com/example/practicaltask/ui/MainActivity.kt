@@ -25,12 +25,6 @@ class MainActivity : BaseActivity() {
 
         activityMainBinding.dashboardViewModel = dashboardViewModel
 
-        //Setting up the toolbar configuration
-        setToolbarConfiguration(false)
-//        movieListAdapter = MovieListAdapter(movieList)
-//        val layoutManager = LinearLayoutManager(applicationContext)
-//        activityMainBinding.recyclerviewGenre.layoutManager = layoutManager
-//        activityMainBinding.recyclerviewGenre.adapter = movieListAdapter
 
         dashboardViewModel.apply {
             isShowProgress.observe(this@MainActivity, Observer {
