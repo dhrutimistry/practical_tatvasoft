@@ -1,27 +1,38 @@
 package com.example.practicaltask.ui.adapter
 
+import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.practicaltask.R
+import com.example.practicaltask.database.AppDatabase
 import com.example.practicaltask.database.Genre
+import com.example.practicaltask.database.Movies
 import com.example.practicaltask.databinding.RawMovieItemBinding
 import com.example.practicaltask.viewmodel.DashboardViewModel
 
 
-class MovieListAdapter(
-    private val dashboardViewModel: DashboardViewModel,val list: ArrayList<Genre> = ArrayList()
-): RecyclerView.Adapter<MovieListAdapter.UserListViewHolder>(){
+class GenreListAdapter(val context: Context,
+                       private val dashboardViewModel: DashboardViewModel, val list: ArrayList<Genre> = ArrayList(), val appDatabase:AppDatabase
+): RecyclerView.Adapter<GenreListAdapter.UserListViewHolder>(){
+    var mListMovie = ArrayList<Movies>()
     inner class UserListViewHolder(private val rawUserItemBinding: RawMovieItemBinding) :
         RecyclerView.ViewHolder(rawUserItemBinding.root) {
 
-        fun bind(gener: Genre) {
+        fun bind(gener: Genre,position: Int) {
             rawUserItemBinding.dashboardViewModel = dashboardViewModel
             rawUserItemBinding.genre = gener
+            mListMovie.clear()
+
+            mListMovie.addAll(appDatabase.moviesDao().getAll(list[position].genreName.toString()))
+
+            rawUserItemBinding.recyclerviewMovie.adapter = MoviesListAdapter(context,dashboardViewModel,mListMovie)
+            Handler(Looper.getMainLooper()).postDelayed({
+
+            }, 1000)
+
+//            dashboardViewModel.movieListAdapter.notifyDataSetChanged()
         }
     }
 
@@ -32,7 +43,7 @@ class MovieListAdapter(
     }
 
     override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(list[position],position)
     }
 
     override fun onBindViewHolder(
@@ -44,7 +55,7 @@ class MovieListAdapter(
             super.onBindViewHolder(holder, position, payloads)
         } else {
             val newItem = payloads[0] as Genre
-            holder.bind(newItem)
+            holder.bind(newItem,position)
         }
     }
 

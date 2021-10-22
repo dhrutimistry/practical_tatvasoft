@@ -3,11 +3,16 @@ package com.example.practicaltask.base
 import android.app.Application
 import android.app.Dialog
 import android.content.*
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
+import android.view.Window
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -15,6 +20,8 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieDrawable
 import com.example.practicaltask.R
 import com.example.practicaltask.database.AppDatabase
 import com.example.practicaltask.databinding.BaseActivityBinding
@@ -40,6 +47,7 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
     private lateinit var broadcastReceiver: BroadcastReceiver
 
     private var dialogExitApplication: Dialog? = null
+    private var dialogProgress: Dialog? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,7 +106,38 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    fun showProgress() {
+        if (!this.isFinishing && !this.isDestroyed && (dialogProgress == null || !dialogProgress!!.isShowing)) {
+            dialogProgress = Dialog(this)
 
+            dialogProgress!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialogProgress!!.setCancelable(false)
+            dialogProgress!!.setContentView(R.layout.raw_progress_layout)
+            dialogProgress!!.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            val mLottieAnimationView: LottieAnimationView = dialogProgress!!.findViewById(
+                R.id.raw_progress_layout_animationview
+            )
+
+            mLottieAnimationView.imageAssetsFolder = "images/"
+            mLottieAnimationView.setAnimation("animation_loader.json")
+            mLottieAnimationView.repeatCount = LottieDrawable.INFINITE
+            mLottieAnimationView.playAnimation()
+
+            if (!isFinishing && !isDestroyed && !dialogProgress!!.isShowing) dialogProgress!!.show()
+        }
+
+    }
+
+    fun hideProgress() {
+        if (!isFinishing && !isDestroyed) {
+            if (dialogProgress != null && dialogProgress!!.isShowing) {
+                dialogProgress!!.dismiss()
+            }
+            dialogProgress = null
+        }
+    }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
         MyApplication.isInternetAvailable = isConnected

@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asLiveData
 import com.example.practicaltask.R
 import com.example.practicaltask.base.CoroutineViewModel
 import com.example.practicaltask.base.MyApplication
@@ -13,7 +12,7 @@ import com.example.practicaltask.database.Genre
 import com.example.practicaltask.database.Movies
 import com.example.practicaltask.network.PostApi
 import com.example.practicaltask.network.model.ModelResponseMovieData
-import com.example.practicaltask.ui.adapter.MovieListAdapter
+import com.example.practicaltask.ui.adapter.GenreListAdapter
 import com.example.practicaltask.utils.AppConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.json.JSONException
@@ -36,18 +35,24 @@ class DashboardViewModel
     var modelResponseMovieData = MutableLiveData<List<ModelResponseMovieData>>(null)
     var modelGenreData = MutableLiveData<List<Genre>>(null)
     var strErrorBase = MutableLiveData<String>("")
-
-    var list   = ArrayList<Movies>()
+    var list   = ArrayList<Genre>()
 
     //Adapter
-    lateinit var movieListAdapter: MovieListAdapter
+    var genreListAdapter: GenreListAdapter = GenreListAdapter(context,this,list,appDatabase)
 
-    var arrayListOfUser = appDatabase.moviesDao().getAllWithFlow().asLiveData()
 
     init {
 
         if (MyApplication.isInternetAvailable) {
-            getMovieData()
+            if(appDatabase.genreDao().getAll().isEmpty()) {
+                getMovieData()
+            }else{
+                list.addAll(appDatabase.genreDao().getAll())
+                genreListAdapter.notifyDataSetChanged();
+            }
+
+            Log.d("my_data", appDatabase.genreDao().getAll().toString())
+            Log.d("my_data2", appDatabase.moviesDao().getAll("Drama").toString())
         }
     }
 
@@ -62,25 +67,51 @@ class DashboardViewModel
                 modelResponseMovieData.value = it
                 appDatabase.genreDao().removeAll()
                 for (i in it.indices){
-                    appDatabase.moviesDao().insert(Movies(0,it[i].name,it[i].thumb_url))
+                    var actors:String =""
+                    var directors:String =""
+                    var genres:String =""
 
+                    for (j in 0 until it[i].actors.size) {
+                        actors = if (actors == "") {
+                            it[i].actors[j]
+                        }else{
+                            "${actors}, ${it[i].actors[j]}"
+                        }
+
+                    }
+
+                    for (j in 0 until it[i].directors.size) {
+                        directors = if (directors == "") {
+                            it[i].directors[j]
+                        }else{
+                            "${directors}, ${it[i].directors[j]}"
+                        }
+
+                    }
+
+                    for (j in 0 until it[i].genre.size) {
+                        genres = if (genres == "") {
+                            it[i].genre[j]
+                        }else{
+                            "${genres}, ${it[i].genre[j]}"
+                        }
+
+                    }
                     for (j in 0 until  it[i].genre.size) {
-//                        appDatabase.genreMovieDao().insert(GenreMovie(0,it[i].genre[j],it[i].name))
 
+                        appDatabase.moviesDao().insert(Movies(0,it[i].name,it[i].thumb_url,it[i].genre[j],genres,
+                        it[i].rating,it[i].desc,actors,directors))
                         appDatabase.genreDao().insert(Genre(0, it[i].genre[j]))
                     }
 
                 }
-//                movieListAdapter = MovieListAdapter(appDatabase.genreDao().getAll())
                 Log.d("my_data", appDatabase.genreDao().getAll().toString())
-                Log.d("my_data1", appDatabase.genreMovieDao().getAll().toString())
-                Log.d("my_data2", appDatabase.moviesDao().getAll().toString())
+                Log.d("my_data2", appDatabase.moviesDao().getAll("Action").toString())
 
-//                modelGenreData.value = appDatabase.genreDao().getAll()
-//                movieListAdapter.submitList(appDatabase.genreDao().getAll())
-//                movieListAdapter = MovieListAdapter(this,
-//                    appDatabase.genreDao().getAll() as ArrayList<Genre>
-//                )
+                list.addAll(appDatabase.genreDao().getAll())
+                genreListAdapter.notifyDataSetChanged();
+
+                isDataAvailable.set(true)
 
             },
             onThrows = {

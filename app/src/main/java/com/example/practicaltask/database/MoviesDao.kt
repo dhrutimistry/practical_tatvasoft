@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 interface MoviesDao
 {
 
-    @Query("SELECT * FROM movies")
-    fun getAll(): List<Movies>
+    @Query("SELECT * FROM movies WHERE genre =:genre")
+    fun getAll(genre:String): List<Movies>
 
     @Query("SELECT * FROM movies")
     fun getAllWithFlow(): Flow<List<Movies>>

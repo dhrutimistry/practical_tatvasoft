@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface GenreDao {
 
-    @Query("SELECT * FROM genre")
+    @Query("SELECT * FROM genre ORDER BY genreName ASC")
     fun getAll(): List<Genre>
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
