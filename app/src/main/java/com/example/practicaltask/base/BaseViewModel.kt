@@ -1,9 +1,11 @@
 package com.example.practicaltask.base
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.practicaltask.R
 import com.example.practicaltask.database.AppDatabase
+import com.example.practicaltask.database.Genre
 import com.example.practicaltask.network.PostApi
 import com.example.practicaltask.network.model.ModelResponseMovieData
 import com.example.practicaltask.utils.AppConstants
@@ -42,6 +44,15 @@ class BaseViewModel @Inject constructor(
             apiFunction = { postApi.fetchUserList() },
             onSuccess = {
                 modelResponseMovieData.value = it
+                appDatabase.genreDao().removeAll()
+                for (i in it.indices){
+                    for (j in 0 until  it[i].genre.size) {
+                        appDatabase.genreDao().insert(Genre(0, it[i].genre[j]))
+                    }
+
+                }
+
+                Log.d("my_data", appDatabase.genreDao().getAll().toString())
             },
             onThrows = {
                 when (it) {
