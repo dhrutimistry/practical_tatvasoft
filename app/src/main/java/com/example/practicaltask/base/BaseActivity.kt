@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import com.example.practicaltask.R
+import com.example.practicaltask.database.AppDatabase
 import com.example.practicaltask.databinding.BaseActivityBinding
 import com.example.practicaltask.utils.listeners.setSafeOnClickListener
 import com.example.practicaltask.utils.listners.ConnectivityReceiver
@@ -30,10 +31,6 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
 
     @Inject
     lateinit var context: Context
-
-//    @Inject
-//    lateinit var appUtils: AppUtils
-
 
     private lateinit var baseActivityBinding: BaseActivityBinding
 
@@ -63,13 +60,6 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
 //                showMessage(it)
             }
         })
-
-        baseViewModel.modelResponseMovieData.observe(this, Observer {
-
-        })
-
-
-
 
     }
 

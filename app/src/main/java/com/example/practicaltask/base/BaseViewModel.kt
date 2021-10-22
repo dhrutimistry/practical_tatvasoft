@@ -27,65 +27,9 @@ class BaseViewModel @Inject constructor(
     val appDatabase: AppDatabase,
 ) : CoroutineViewModel(context) {
 
-
-    var modelResponseMovieData = MutableLiveData<List<ModelResponseMovieData>>(null)
-    var booleanLogoutSuccess = MutableLiveData<Boolean>(false)
-
-    //Progress
     var strErrorBase = MutableLiveData<String>("")
 
-    init {
-        getMovieData()
-    }
 
-    private fun getMovieData() {
-
-        callApiUsingCoroutine(
-            apiFunction = { postApi.fetchUserList() },
-            onSuccess = {
-                modelResponseMovieData.value = it
-                appDatabase.genreDao().removeAll()
-                for (i in it.indices){
-                    for (j in 0 until  it[i].genre.size) {
-                        appDatabase.genreDao().insert(Genre(0, it[i].genre[j]))
-                    }
-
-                }
-
-                Log.d("my_data", appDatabase.genreDao().getAll().toString())
-            },
-            onThrows = {
-                when (it) {
-                    is HttpException -> {
-                        try {
-                            if (it.code() == AppConstants.INT_UNAUTHORIZED) {
-                                val mJsonObjectMsg =
-                                    JSONObject(it.response()?.errorBody()!!.string())
-                                strErrorBase.value = mJsonObjectMsg.optString("message")
-
-                            } else {
-                                val mJsonObjectMsg =
-                                    JSONObject(it.response()?.errorBody()!!.string())
-                                strErrorBase.value = mJsonObjectMsg.optString("message")
-                            }
-                        } catch (e1: IOException) {
-                            e1.printStackTrace()
-                        } catch (e1: JSONException) {
-                            e1.printStackTrace()
-                        }
-                    }
-                    is SocketTimeoutException -> {
-                        strErrorBase.value = context.resources.getString(R.string.text_time_out_msg)
-                    }
-                    else -> {
-                        strErrorBase.value =
-                            context.resources.getString(R.string.text_server_error_msg)
-                    }
-                }
-            })
-
-
-    }
 
 
 }

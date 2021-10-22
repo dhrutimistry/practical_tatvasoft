@@ -26,6 +26,9 @@ interface UserDao
     @Insert
     fun insertAll(users: ArrayList<User>)
 
+    @Insert
+    fun insert(users: User)
+
     //For Inserting the list of user for asynchronously using coroutine.
     //************************************************
     @Insert(onConflict = REPLACE)
