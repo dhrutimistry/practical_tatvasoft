@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Practical Task</string>
+
+    <string name="internet_error">Please check your internet connection and try again later.</string>
+    <string name="general_error">Oops Something went wrong, we will fix it soon...</string>
+
+    <string name="text_time_out_msg">Connection Time Out!!!</string>
+    <string name="text_server_error_msg">Server Connection Error!!!</string>
+    <string name="text_exit_title">Exit</string>
+    <string name="text_exit_information">Are you sure want to exit?</string>
+    <string name="text_yes">Yes</string>
+    <string name="text_no">No</string>
 </resources>
