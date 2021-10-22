@@ -5,22 +5,17 @@ import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.practicaltask.R
 import com.example.practicaltask.base.CoroutineViewModel
 import com.example.practicaltask.base.MyApplication
 import com.example.practicaltask.database.AppDatabase
 import com.example.practicaltask.database.Genre
-import com.example.practicaltask.database.User
+import com.example.practicaltask.database.Movies
 import com.example.practicaltask.network.PostApi
 import com.example.practicaltask.network.model.ModelResponseMovieData
 import com.example.practicaltask.ui.adapter.MovieListAdapter
 import com.example.practicaltask.utils.AppConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.HttpException
@@ -42,12 +37,12 @@ class DashboardViewModel
     var modelGenreData = MutableLiveData<List<Genre>>(null)
     var strErrorBase = MutableLiveData<String>("")
 
-    var list   = ArrayList<User>()
+    var list   = ArrayList<Movies>()
 
     //Adapter
     lateinit var movieListAdapter: MovieListAdapter
 
-    var arrayListOfUser = appDatabase.userDao().getAllWithFlow().asLiveData()
+    var arrayListOfUser = appDatabase.moviesDao().getAllWithFlow().asLiveData()
 
     init {
 
@@ -67,19 +62,21 @@ class DashboardViewModel
                 modelResponseMovieData.value = it
                 appDatabase.genreDao().removeAll()
                 for (i in it.indices){
+                    appDatabase.moviesDao().insert(Movies(0,it[i].name,it[i].thumb_url))
+
                     for (j in 0 until  it[i].genre.size) {
-//                        for (k in it.indices){
-//                            list.add( User(0,it[k].name,it[k].thumb_url))
-//                        }
-                        appDatabase.genreDao().insert(Genre(0, it[i].genre[j]
-                            ))
+//                        appDatabase.genreMovieDao().insert(GenreMovie(0,it[i].genre[j],it[i].name))
+
+                        appDatabase.genreDao().insert(Genre(0, it[i].genre[j]))
                     }
 
                 }
 //                movieListAdapter = MovieListAdapter(appDatabase.genreDao().getAll())
                 Log.d("my_data", appDatabase.genreDao().getAll().toString())
+                Log.d("my_data1", appDatabase.genreMovieDao().getAll().toString())
+                Log.d("my_data2", appDatabase.moviesDao().getAll().toString())
 
-                modelGenreData.value = appDatabase.genreDao().getAll()
+//                modelGenreData.value = appDatabase.genreDao().getAll()
 //                movieListAdapter.submitList(appDatabase.genreDao().getAll())
 //                movieListAdapter = MovieListAdapter(this,
 //                    appDatabase.genreDao().getAll() as ArrayList<Genre>

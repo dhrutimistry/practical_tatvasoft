@@ -9,6 +9,5 @@ import androidx.room.PrimaryKey
 data class Genre (
     @PrimaryKey(autoGenerate = true) val gid: Int,
     @ColumnInfo(name = "genreName") val genreName: String?,
-//    @ColumnInfo(name="movies") val movies:List<User>
 
 )

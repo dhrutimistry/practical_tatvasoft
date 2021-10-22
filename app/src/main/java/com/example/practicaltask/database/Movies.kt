@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class User(
+data class Movies(
     @PrimaryKey(autoGenerate = true) val uid: Int,
 
     @ColumnInfo(name = "name") val name: String?,
