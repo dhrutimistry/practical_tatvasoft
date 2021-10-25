@@ -3,6 +3,7 @@ package com.example.practicaltask.ui.adapter
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,7 @@ class GenreListAdapter(val context: Context,
             mListMovie.addAll(appDatabase.moviesDao().getAll(list[position].genreName.toString()))
 
             rawUserItemBinding.recyclerviewMovie.adapter = MoviesListAdapter(context,dashboardViewModel,mListMovie)
+            Log.d("mlist", "$position - ${mListMovie.size} - $mListMovie")
             Handler(Looper.getMainLooper()).postDelayed({
 
             }, 1000)

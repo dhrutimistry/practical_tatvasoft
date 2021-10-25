@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
 import androidx.activity.viewModels
@@ -31,7 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener {
+open class BaseActivity : AppCompatActivity() {
 
     @Inject
     lateinit var applications: Application
@@ -44,7 +45,6 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
 
     val baseViewModel: BaseViewModel by viewModels()
 
-    private lateinit var broadcastReceiver: BroadcastReceiver
 
     private var dialogExitApplication: Dialog? = null
     private var dialogProgress: Dialog? = null
@@ -56,12 +56,7 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
 
         baseActivityBinding = DataBindingUtil.setContentView(this, R.layout.base_activity)
 
-        broadcastReceiver = ConnectivityReceiver()
 
-        registerReceiver(
-            broadcastReceiver,
-            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        )
 
         baseViewModel.strErrorBase.observe(this, Observer {
             if (it != "") {
@@ -71,18 +66,6 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        ConnectivityReceiver.connectivityReceiverListener = this
-    }
-
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(broadcastReceiver)
-
-    }
 
 
 
@@ -139,9 +122,7 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
         }
     }
 
-    override fun onNetworkConnectionChanged(isConnected: Boolean) {
-        MyApplication.isInternetAvailable = isConnected
-    }
+
 
 
 
@@ -193,6 +174,7 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
             baseActivityBinding.baseActivityToolbar.isVisible = false
         }
     }
+
 
 
 

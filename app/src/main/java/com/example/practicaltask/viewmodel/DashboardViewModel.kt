@@ -40,8 +40,8 @@ class DashboardViewModel
     var genreListAdapter: GenreListAdapter = GenreListAdapter(context,this,list,appDatabase)
 
 
-    init {
 
+    fun apiCall(){
         if (MyApplication.isInternetAvailable) {
             if(appDatabase.genreDao().getAll().isEmpty()) {
                 getMovieData()
@@ -54,7 +54,6 @@ class DashboardViewModel
             Log.d("my_data2", appDatabase.moviesDao().getAll("Drama").toString())
         }
     }
-
     /**
      * Description : Web Service call to fetch list of movies.
      */
